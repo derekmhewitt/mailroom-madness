@@ -57,4 +57,5 @@ def test_log_thank_you():
     d = {'Bob Barker': []}
     mailroom_madness.log_thank_you('Bob Barker', 53, d, out)
     assert d == {'Bob Barker': [53]}
-    assert out.getvalue().strip() == 'Thank you Bob Barker for your generous donation of 53 dollars.'
+    out_text = 'Thank you Bob Barker for your generous donation of 53 dollars.'
+    assert out.getvalue().strip() == out_text
