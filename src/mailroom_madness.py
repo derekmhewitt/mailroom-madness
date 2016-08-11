@@ -18,28 +18,53 @@ def prompt_donor_name(donor_data):
     If name is not in donor_data, enter it with [] value.
     Returns name.
     """
-    prompt = 'Enter a donor name or "list" for all donor names.'
-    while True:
-        name = raw_input(prompt)
-        if name == 'list':
-            print(donor_data.keys())
-        else:
-            break
-    # TODO: validate name here
+    name = get_name(donor_data)
     donor_data.setdefault(name, [])
     return name
 
 
-def get_int(prompt, failure, out=sys.stdout):
-    """Function does stuff."""
+def get_name(donor_data, out=sys.stdout):
+    """Get a name from the user, prompt """
+    prompt = 'Enter a donor name or "list" for all donor names> '
+    while True:
+        name = raw_input(prompt)
+        if name == 'list':
+            list_donor_names(donor_data.keys(), out)
+        else:
+            return name
+
+
+def list_donor_names(names, out=sys.stdout):
+    """Print a list of donor names."""
+    out.write('Donors:\n')
+    for name in names:
+        out.write('* {}\n'.format(name))
+
+
+def get_int(out=sys.stdout):
+    """Get an donation amount from the user."""
+    prompt = 'Enter a donation amount>'
+    failure = "That's not an integer."
     while True:
         try:
             return int(raw_input(prompt))
         except ValueError:
-            out.write(failure)
+            out.write('{}\n'.format(failure))
 
 
-def send_thank_you(name, num, donor_data, out=sys.stdout):
-    """docstring."""
+def log_thank_you(name, num, donor_data, out=sys.stdout):
+    """Records the new donation into donor_data and prints a report of
+    the donation to the user.
+    """
     donor_data[name].append(num)
-    out.write('Thank you {} for your generous donation of {} dollars.'.format(name, num))
+    message = 'Thank you {} for your generous donation of {} dollars.\n'
+    out.write(message.format(name, num))
+
+
+def send_thank_you(donor_data):
+    """Prompts the user for a name and donation amount, then reports a
+    message and records the donation into donor_data.
+    """
+    name = prompt_donor_name(donor_data)
+    amount = get_int()
+    log_thank_you(name, amount, donor_data)
