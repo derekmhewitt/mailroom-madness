@@ -1,0 +1,11 @@
+argh==0.26.2
+colorama==0.3.7
+coverage==4.2
+docopt==0.6.2
+pathtools==0.1.2
+py==1.4.31
+pytest==2.9.2
+pytest-cov==2.3.1
+pytest-watch==4.1.0
+PyYAML==3.11
+watchdog==0.8.3
