@@ -6,7 +6,6 @@ Attributes:
     TEST_NAMES (TYPE): Description
 """
 import pytest
-import io
 
 TEST_INTS = [
     ('13', 13),
@@ -123,6 +122,25 @@ def test_print_row():
     compare = 'Stephen Brown   145    3    48.33   '
     print_row(row, padding, out)
     assert out.getvalue().strip() == compare.strip()
+
+
+def test_print_donations():
+    """Function tests pring_row with test data."""
+    from mailroom_madness import print_donations
+    from io import StringIO
+    out = StringIO()
+
+    test_data = {
+        'Jennifer White': [1, 2, 3],
+        'Larry Page': [4, 5, 6,],
+    }
+
+    print_donations(test_data, out)
+    expected_output = '''
+Donor Name:     Total Donated:  Number of Donations:  Average Donation Amount:  
+Larry Page      15              3                     5.0                       
+Jennifer White  6               3                     2.0'''
+    assert out.getvalue().strip() == expected_output.strip()
 
 
 # def test_log_thank_you():

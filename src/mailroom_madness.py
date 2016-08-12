@@ -202,3 +202,5 @@ def print_donations(donor_data, out=sys.stdout):
         out (file, optional): The file to print to.
     """
     print_table(generate_rows(donor_data), out=out)
+
+print_donations(donor_data)
