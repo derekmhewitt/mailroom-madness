@@ -4,6 +4,13 @@ from __future__ import division
 import sys
 
 
+# backwards compatible input
+try:
+    input = raw_input
+except NameError:
+    pass
+
+
 def prompt_donor_name(donor_data):
     """Function gets name from stdin.
 
@@ -240,13 +247,6 @@ def main():
             exit()
         else:
             print(u"That's not an option")
-
-
-# backwards compatible input
-try:
-    input = raw_input
-except NameError:
-    pass
 
 
 if __name__ == '__main__':
