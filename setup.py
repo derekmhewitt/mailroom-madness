@@ -10,7 +10,7 @@ setup(
     author_email="derekmhewitt@gmail.com, well1912@gmail.com",
     license="MIT",
     py_modules=["mailroom-madness"],
-    package_dir="{'': 'src'}",
+    package_dir={'': 'src'},
     install_requires=[],
     extras_require={'test': ['pytest', 'pytest-watch', 'tox']},
 )
