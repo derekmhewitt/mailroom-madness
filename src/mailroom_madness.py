@@ -17,6 +17,9 @@ def prompt_donor_name(donor_data):
     If name is list, list donor_data.
     If name is not in donor_data, enter it with [] value.
     Returns name.
+
+    Args:
+        donor_data (TYPE): Description
     """
     name = get_name(donor_data)
     donor_data.setdefault(name, [])
@@ -24,7 +27,12 @@ def prompt_donor_name(donor_data):
 
 
 def get_name(donor_data, out=sys.stdout):
-    """Get a name from the user, prompt """
+    """Get a name from the user, prompt.
+
+    Args:
+        donor_data (TYPE): Description
+        out (TYPE, optional): Description
+    """
     prompt = 'Enter a donor name or "list" for all donor names> '
     while True:
         name = raw_input(prompt)
@@ -35,14 +43,23 @@ def get_name(donor_data, out=sys.stdout):
 
 
 def list_donor_names(names, out=sys.stdout):
-    """Print a list of donor names."""
+    """Print a list of donor names.
+
+    Args:
+        names (list): List of donor names.
+        out (TYPE, optional): Description
+    """
     out.write('Donors:\n')
-    for name in names:
+    for name in sorted(names):
         out.write('* {}\n'.format(name))
 
 
 def get_int(out=sys.stdout):
-    """Get an donation amount from the user."""
+    """Get an donation amount from the user.
+
+    Args:
+        out (TYPE, optional): Description
+    """
     prompt = 'Enter a donation amount>'
     failure = "That's not an integer."
     while True:
@@ -55,6 +72,12 @@ def get_int(out=sys.stdout):
 def log_thank_you(name, num, donor_data, out=sys.stdout):
     """Records the new donation into donor_data and prints a report of
     the donation to the user.
+
+    Args:
+        name (TYPE): Description
+        num (TYPE): Description
+        donor_data (TYPE): Description
+        out (TYPE, optional): Description
     """
     donor_data[name].append(num)
     message = 'Thank you {} for your generous donation of {} dollars.\n'
@@ -64,6 +87,9 @@ def log_thank_you(name, num, donor_data, out=sys.stdout):
 def send_thank_you(donor_data):
     """Prompts the user for a name and donation amount, then reports a
     message and records the donation into donor_data.
+
+    Args:
+        donor_data (TYPE): Description
     """
     name = prompt_donor_name(donor_data)
     amount = get_int()
@@ -71,35 +97,75 @@ def send_thank_you(donor_data):
 
 
 def align_cell(value, padding):
-    """Align a single value using padding."""
+    """Align a single value using padding.
+
+    Args:
+        value (TYPE): Description
+        padding (TYPE): Description
+    """
     whitespace = ' ' * (padding - len(str(value)) + 2)
     return '{}{}'.format(value, whitespace)
 
 
 def max_size(t):
-    ''' Return the size of largest sized value from t by its string
-    representation '''
+    '''Return the size of largest sized value from t by its string
+    representation
+
+    Args:
+        t (TYPE): Description
+    '''
     return max(map(lambda x: len(str(x)), t))
 
 
 def get_paddings(rows):
-    """Get the whitespace padding amount per column."""
-    return [max_size(map(lambda t: t[i], rows)) for i in range(len(rows[0]))]
+    """Get the whitespace padding amount per column.
+
+    Args:
+        rows (list)
+    """
+    return [max_size(map(lambda row: row[i], rows))
+            for i in range(len(rows[0]))]
 
 
 def print_row(row, padding):
+    """Summary
+
+    Args:
+        row (TYPE): Description
+        padding (TYPE): Description
+
+    Returns:
+        TYPE: Description
+    """
     for value, padding in zip(row, padding):
         sys.stdout.write(align_cell(value, padding))
     sys.stdout.write('\n')
 
 
 def print_table(rows):
+    """Summary
+
+    Args:
+        rows (TYPE): Description
+
+    Returns:
+        TYPE: Description
+    """
     paddings = get_paddings(rows)
     for row in rows:
         print_row(row, paddings)
 
 
 def generate_row(name, donations):
+    """Summary
+
+    Args:
+        name (TYPE): Description
+        donations (TYPE): Description
+
+    Returns:
+        TYPE: Description
+    """
     total = sum(donations)
     donation_count = len(donations)
     average = total/donation_count
@@ -107,6 +173,14 @@ def generate_row(name, donations):
 
 
 def generate_rows(donor_data):
+    """Summary
+
+    Args:
+        donor_data (TYPE): Description
+
+    Returns:
+        TYPE: Description
+    """
     t = list(map(lambda k: generate_row(k, donor_data[k]), donor_data.keys()))
     t.sort(key=lambda x: x[1], reverse=True)
     return t
