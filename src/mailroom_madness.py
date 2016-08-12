@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
 """File contains a mailroom helper function."""
-import io
 import sys
 
 
 donor_data = {
     'Jennifer White': [50, 32, 17],
     'Larry Page': [83, 26, 12],
-    'Stephen Brown': [87, 35, 23]
+    'Stephen Brown': [87, 35, 23],
+    'Dennis Ritchie': [30, 40, 50],
+    'John McCarthy': [100, 100, 100]
 }
 
 
@@ -19,7 +20,7 @@ def prompt_donor_name(donor_data):
     Returns name.
 
     Args:
-        donor_data (TYPE): Description
+        donor_data (dict)
     """
     name = get_name(donor_data)
     donor_data.setdefault(name, [])
@@ -30,8 +31,8 @@ def get_name(donor_data, out=sys.stdout):
     """Get a name from the user, prompt.
 
     Args:
-        donor_data (TYPE): Description
-        out (TYPE, optional): Description
+        donor_data (dict)
+        out (file, optional)
     """
     prompt = 'Enter a donor name or "list" for all donor names> '
     while True:
@@ -47,7 +48,7 @@ def list_donor_names(names, out=sys.stdout):
 
     Args:
         names (list): List of donor names.
-        out (TYPE, optional): Description
+        out (file, optional)
     """
     out.write('Donors:\n')
     for name in sorted(names):
@@ -58,7 +59,7 @@ def get_int(out=sys.stdout):
     """Get an donation amount from the user.
 
     Args:
-        out (TYPE, optional): Description
+        out (file, optional): Description
     """
     prompt = 'Enter a donation amount>'
     failure = "That's not an integer."
@@ -74,10 +75,10 @@ def log_thank_you(name, num, donor_data, out=sys.stdout):
     the donation to the user.
 
     Args:
-        name (TYPE): Description
-        num (TYPE): Description
-        donor_data (TYPE): Description
-        out (TYPE, optional): Description
+        name (str)
+        num (int)
+        donor_data (dict)
+        out (file, optional)
     """
     donor_data[name].append(num)
     message = 'Thank you {} for your generous donation of {} dollars.\n'
@@ -89,7 +90,7 @@ def send_thank_you(donor_data):
     message and records the donation into donor_data.
 
     Args:
-        donor_data (TYPE): Description
+        donor_data (dict)
     """
     name = prompt_donor_name(donor_data)
     amount = get_int()
@@ -100,8 +101,8 @@ def align_cell(value, padding):
     """Align a single value using padding.
 
     Args:
-        value (TYPE): Description
-        padding (TYPE): Description
+        value (str or int)
+        padding (int)
     """
     whitespace = ' ' * (padding - len(str(value)) + 2)
     return '{}{}'.format(value, whitespace)
@@ -112,7 +113,7 @@ def max_size(t):
     representation
 
     Args:
-        t (TYPE): Description
+        t (list): A list of values to be process.
     '''
     return max(map(lambda x: len(str(x)), t))
 
@@ -128,11 +129,12 @@ def get_paddings(rows):
 
 
 def print_row(row, padding, out=sys.stdout):
-    """Summary
+    """Print row to out with supplied padding.
 
     Args:
-        row (TYPE): Description
-        padding (TYPE): Description
+        row (tuple)
+        padding (int)
+        out (file, optional): The file to print to.
 
     Returns:
         TYPE: Description
@@ -142,29 +144,30 @@ def print_row(row, padding, out=sys.stdout):
     out.write('\n')
 
 
-def print_table(rows):
-    """Summary
+def print_table(rows, out=sys.stdout):
+    """Print an entire table to the console.
 
     Args:
-        rows (TYPE): Description
+        rows (list): The table as a list of rows
+        out (file, optional): The file to print to.
 
     Returns:
         TYPE: Description
     """
     paddings = get_paddings(rows)
     for row in rows:
-        print_row(row, paddings)
+        print_row(row, paddings, out=out)
 
 
 def generate_row(name, donations):
-    """Summary
+    """Generate a single row from name and donations.
 
     Args:
-        name (TYPE): Description
-        donations (TYPE): Description
+        name (str): The name of the donor
+        donations (list): A list of donations
 
     Returns:
-        TYPE: Description
+        tuple
     """
     total = sum(donations)
     donation_count = len(donations)
@@ -173,12 +176,12 @@ def generate_row(name, donations):
 
 
 def generate_rows(donor_data):
-    """Summary
+    """Generate rows from donor_data.
     Args:
-        donor_data (TYPE): Description
+        donor_data (TYPE): The data to generate a table from
 
     Returns:
-        TYPE: Description
+        list: A list of tuples, which represent rows
     """
     t = list(map(lambda k: generate_row(k, donor_data[k]), donor_data.keys()))
     t.sort(key=lambda x: x[1], reverse=True)
@@ -189,3 +192,13 @@ def generate_rows(donor_data):
         'Average Donation Amount:'
     )]
     return headers + t
+
+
+def print_donations(donor_data, out=sys.stdout):
+    """Generate and print a table of donor_data to out.
+    Args:
+        donor_data (dict): The data to generate and print a table
+        from.
+        out (file, optional): The file to print to.
+    """
+    print_table(generate_rows(donor_data), out=out)
