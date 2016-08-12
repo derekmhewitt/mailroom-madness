@@ -15,24 +15,31 @@ def prompt_donor_name(donor_data):
         donor_data (dict)
     """
     name = get_name(donor_data)
+    if not name:
+        return False
     donor_data.setdefault(name, [])
     return name
 
 
 def get_name(donor_data, out=sys.stdout):
-    """Get a name from the user, prompt.
+    """Get a name from the user. Return the amount or false if the
+    user wishes to return to the main prompt.
 
     Args:
         donor_data (dict)
         out (file, optional)
     """
-    prompt = u'Enter a donor name or "list" for all donor names> '
+    prompt = u'Enter a donor name, "list", or "cancel" > '
     while True:
         name = input(prompt)
         if name == u'list':
             list_donor_names(donor_data.keys(), out)
-        else:
+        elif name == u'cancel':
+            return False
+        elif name:
             return name
+        else:
+            out.write('Please give a name.')
 
 
 def list_donor_names(names, out=sys.stdout):
@@ -48,16 +55,21 @@ def list_donor_names(names, out=sys.stdout):
 
 
 def get_int(out=sys.stdout):
-    """Get an donation amount from the user.
+    """Get an donation amount from the user. Return the amount or
+    false if the user wishes to return to the main prompt.
 
     Args:
         out (file, optional): Description
     """
-    prompt = u'Enter a donation amount>'
+    prompt = u'Enter a donation amount or "cancel"> '
     failure = u"That's not an integer."
     while True:
         try:
-            return int(input(prompt))
+            user_input = input(prompt)
+            if user_input == u'cancel':
+                return False
+            else:
+                return int(user_input)
         except ValueError:
             out.write(u'{}\n'.format(failure))
 
@@ -85,7 +97,13 @@ def send_thank_you(donor_data):
         donor_data (dict)
     """
     name = prompt_donor_name(donor_data)
+    if name is False:
+        return
+
     amount = get_int()
+    if amount is False:
+        return
+
     log_thank_you(name, amount, donor_data)
 
 
@@ -163,7 +181,7 @@ def generate_row(name, donations):
     """
     total = sum(donations)
     donation_count = len(donations)
-    average = total / donation_count
+    average = total / (donation_count or 1)
     return (name, total, donation_count, average)
 
 
@@ -210,7 +228,9 @@ def main():
         print(u"  1. Send a thank you")
         print(u"  2. Create a report")
         print(u"  3. Exit")
+
         option = input(u'Enter a number > ')
+
         if option == u'1':
             send_thank_you(donor_data)
         elif option == u'2':
