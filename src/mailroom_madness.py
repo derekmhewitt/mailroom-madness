@@ -3,15 +3,6 @@
 import sys
 
 
-donor_data = {
-    'Jennifer White': [50, 32, 17],
-    'Larry Page': [83, 26, 12],
-    'Stephen Brown': [87, 35, 23],
-    'Dennis Ritchie': [30, 40, 50],
-    'John McCarthy': [100, 100, 100]
-}
-
-
 def prompt_donor_name(donor_data):
     """Function gets name from stdin.
 
@@ -36,7 +27,7 @@ def get_name(donor_data, out=sys.stdout):
     """
     prompt = 'Enter a donor name or "list" for all donor names> '
     while True:
-        name = raw_input(prompt)
+        name = input(prompt)
         if name == 'list':
             list_donor_names(donor_data.keys(), out)
         else:
@@ -65,7 +56,7 @@ def get_int(out=sys.stdout):
     failure = "That's not an integer."
     while True:
         try:
-            return int(raw_input(prompt))
+            return int(input(prompt))
         except ValueError:
             out.write('{}\n'.format(failure))
 
@@ -202,3 +193,41 @@ def print_donations(donor_data, out=sys.stdout):
         out (file, optional): The file to print to.
     """
     print_table(generate_rows(donor_data), out=out)
+
+
+def main():
+    donor_data = {
+        'Jennifer White': [50, 32, 17],
+        'Larry Page': [83, 26, 12],
+        'Stephen Brown': [87, 35, 23],
+        'Dennis Ritchie': [30, 40, 50],
+        'John McCarthy': [100, 100, 100]
+    }
+
+
+    while True:
+        print("Please select an option:")
+        print("  1. Send a thank you")
+        print("  2. Create a report")
+        print("  3. Exit")
+        option = input('Enter a number > ')
+        if option == '1':
+            send_thank_you(donor_data)
+        elif option == '2':
+            print_donations(donor_data)
+        elif option == '3':
+            print("Bye!")
+            exit()
+        else:
+            print("That's not an option")
+
+
+# backwards compatible input
+try:
+    input = raw_input
+except NameError:
+    pass
+
+
+if __name__ == '__main__':
+    main()
