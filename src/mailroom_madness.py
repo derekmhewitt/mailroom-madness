@@ -29,7 +29,9 @@ def prompt_donor_name(donor_data):
 
 
 def get_name(donor_data, out=sys.stdout):
-    """Get a name from the user. Return the amount or false if the
+    """Get a name from the user.
+
+    Return the amount or false if the
     user wishes to return to the main prompt.
 
     Args:
@@ -62,7 +64,9 @@ def list_donor_names(names, out=sys.stdout):
 
 
 def get_int(out=sys.stdout):
-    """Get an donation amount from the user. Return the amount or
+    """Get an donation amount from the user.
+
+    Return the amount or
     false if the user wishes to return to the main prompt.
 
     Args:
@@ -82,8 +86,7 @@ def get_int(out=sys.stdout):
 
 
 def log_thank_you(name, num, donor_data, out=sys.stdout):
-    """Records the new donation into donor_data and prints a report of
-    the donation to the user.
+    """Record new donation and prints a report.
 
     Args:
         name (str)
@@ -92,13 +95,12 @@ def log_thank_you(name, num, donor_data, out=sys.stdout):
         out (file, optional)
     """
     donor_data[name].append(num)
-    message = u'Thank you {} for your generous donation of {} dollars.\n'
+    message = u'Thanks {} for your generous donation of {} dollars.\n'
     out.write(message.format(name, num))
 
 
 def send_thank_you(donor_data):
-    """Prompts the user for a name and donation amount, then reports a
-    message and records the donation into donor_data.
+    """Prompt user for a name and donation amount and records them.
 
     Args:
         donor_data (dict)
@@ -126,12 +128,11 @@ def align_cell(value, padding):
 
 
 def max_size(t):
-    '''Return the size of largest sized value from t by its string
-    representation
+    """Return largest value from t by its string representation.
 
     Args:
         t (list): A list of values to be process.
-    '''
+    """
     return max(map(lambda x: len(str(x)), t))
 
 
@@ -194,6 +195,7 @@ def generate_row(name, donations):
 
 def generate_rows(donor_data):
     """Generate rows from donor_data.
+
     Args:
         donor_data (dict): The data to generate a table from
 
@@ -213,6 +215,7 @@ def generate_rows(donor_data):
 
 def print_donations(donor_data, out=sys.stdout):
     """Generate and print a table of donor_data to out.
+
     Args:
         donor_data (dict): The data to generate and print a table
         from.
@@ -222,6 +225,10 @@ def print_donations(donor_data, out=sys.stdout):
 
 
 def main():
+    """Main function.
+
+    This function impelements our main prompt and gives the user options.
+    """
     donor_data = {
         u'Jennifer White': [50, 32, 17],
         u'Larry Page': [83, 26, 12],

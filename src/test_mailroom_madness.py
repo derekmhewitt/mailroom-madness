@@ -80,13 +80,17 @@ def test_log_thank_you():
     d = {u'Bob Barker': []}
     mailroom_madness.log_thank_you(u'Bob Barker', 53, d, out)
     assert d == {u'Bob Barker': [53]}
-    out_text = u'Thank you Bob Barker for your generous donation of 53 dollars.'
+    out_text = u'Thanks Bob Barker for your generous donation of 53 dollars.'
     assert out.getvalue().strip() == out_text
 
 
 def test_send_thank_you():
-    """Not sure if we should test this."""
-    pass
+    """Function tests send_thank_you with test data."""
+    import mailroom_madness
+    mailroom_madness.input = lambda _: u'1234'
+    donor_data = {}
+    mailroom_madness.send_thank_you(donor_data)
+    assert donor_data[u'1234'] == [1234]
 
 
 @pytest.mark.parametrize('user_input, correct_output', TEST_MAX_SIZE)
@@ -136,21 +140,5 @@ def test_print_donations():
     }
 
     print_donations(test_data, out)
-    expected_output = u'''
-Donor Name:     Total Donated:  Number of Donations:  Average Donation Amount:  
-Larry Page      15              3                     5.0                       
-Jennifer White  6               3                     2.0'''
+    expected_output = "Donor Name:     Total Donated:  Number of Donations:  Average Donation Amount:  \n" + "Larry Page      15              3                     5.0                       \n" + "Jennifer White  6               3                     2.0"
     assert out.getvalue().strip() == expected_output.strip()
-
-
-# def test_log_thank_you():
-#     """Function tests log_thank_you with test data."""
-#     import mailroom_madness
-#     from io import StringIO
-#     out = StringIO()
-#     mailroom_madness.raw_input = lambda _: '53'
-#     d = {'Bob Barker': []}
-#     mailroom_madness.log_thank_you('Bob Barker', 53, d, out)
-#     assert d == {'Bob Barker': [53]}
-#     out_text = 'Thank you Bob Barker for your generous donation of 53 dollars.'
-#     assert out.getvalue().strip() == out_text
