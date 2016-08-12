@@ -182,4 +182,10 @@ def generate_rows(donor_data):
     """
     t = list(map(lambda k: generate_row(k, donor_data[k]), donor_data.keys()))
     t.sort(key=lambda x: x[1], reverse=True)
-    return ['Donor Name:', 'Total Donated:', 'Number of Donations:', 'Average Donation Amount:'] + t
+    headers = [(
+        'Donor Name:',
+        'Total Donated:',
+        'Number of Donations:',
+        'Average Donation Amount:'
+    )]
+    return headers + t
