@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 """File contains a mailroom helper function."""
+from __future__ import division
 import sys
 
 
@@ -25,10 +26,10 @@ def get_name(donor_data, out=sys.stdout):
         donor_data (dict)
         out (file, optional)
     """
-    prompt = 'Enter a donor name or "list" for all donor names> '
+    prompt = u'Enter a donor name or "list" for all donor names> '
     while True:
         name = input(prompt)
-        if name == 'list':
+        if name == u'list':
             list_donor_names(donor_data.keys(), out)
         else:
             return name
@@ -41,9 +42,9 @@ def list_donor_names(names, out=sys.stdout):
         names (list): List of donor names.
         out (file, optional)
     """
-    out.write('Donors:\n')
+    out.write(u'Donors:\n')
     for name in sorted(names):
-        out.write('* {}\n'.format(name))
+        out.write(u'* {}\n'.format(name))
 
 
 def get_int(out=sys.stdout):
@@ -52,13 +53,13 @@ def get_int(out=sys.stdout):
     Args:
         out (file, optional): Description
     """
-    prompt = 'Enter a donation amount>'
-    failure = "That's not an integer."
+    prompt = u'Enter a donation amount>'
+    failure = u"That's not an integer."
     while True:
         try:
             return int(input(prompt))
         except ValueError:
-            out.write('{}\n'.format(failure))
+            out.write(u'{}\n'.format(failure))
 
 
 def log_thank_you(name, num, donor_data, out=sys.stdout):
@@ -72,7 +73,7 @@ def log_thank_you(name, num, donor_data, out=sys.stdout):
         out (file, optional)
     """
     donor_data[name].append(num)
-    message = 'Thank you {} for your generous donation of {} dollars.\n'
+    message = u'Thank you {} for your generous donation of {} dollars.\n'
     out.write(message.format(name, num))
 
 
@@ -95,8 +96,8 @@ def align_cell(value, padding):
         value (str or int)
         padding (int)
     """
-    whitespace = ' ' * (padding - len(str(value)) + 2)
-    return '{}{}'.format(value, whitespace)
+    whitespace = u' ' * (padding - len(str(value)) + 2)
+    return u'{}{}'.format(value, whitespace)
 
 
 def max_size(t):
@@ -132,7 +133,7 @@ def print_row(row, padding, out=sys.stdout):
     """
     for value, padding in zip(row, padding):
         out.write(align_cell(value, padding))
-    out.write('\n')
+    out.write(u'\n')
 
 
 def print_table(rows, out=sys.stdout):
@@ -162,7 +163,7 @@ def generate_row(name, donations):
     """
     total = sum(donations)
     donation_count = len(donations)
-    average = total/donation_count
+    average = total / donation_count
     return (name, total, donation_count, average)
 
 
@@ -177,10 +178,10 @@ def generate_rows(donor_data):
     t = list(map(lambda k: generate_row(k, donor_data[k]), donor_data.keys()))
     t.sort(key=lambda x: x[1], reverse=True)
     headers = [(
-        'Donor Name:',
-        'Total Donated:',
-        'Number of Donations:',
-        'Average Donation Amount:'
+        u'Donor Name:',
+        u'Total Donated:',
+        u'Number of Donations:',
+        u'Average Donation Amount:'
     )]
     return headers + t
 
@@ -197,29 +198,28 @@ def print_donations(donor_data, out=sys.stdout):
 
 def main():
     donor_data = {
-        'Jennifer White': [50, 32, 17],
-        'Larry Page': [83, 26, 12],
-        'Stephen Brown': [87, 35, 23],
-        'Dennis Ritchie': [30, 40, 50],
-        'John McCarthy': [100, 100, 100]
+        u'Jennifer White': [50, 32, 17],
+        u'Larry Page': [83, 26, 12],
+        u'Stephen Brown': [87, 35, 23],
+        u'Dennis Ritchie': [30, 40, 50],
+        u'John McCarthy': [100, 100, 100]
     }
 
-
     while True:
-        print("Please select an option:")
-        print("  1. Send a thank you")
-        print("  2. Create a report")
-        print("  3. Exit")
-        option = input('Enter a number > ')
-        if option == '1':
+        print(u"Please select an option:")
+        print(u"  1. Send a thank you")
+        print(u"  2. Create a report")
+        print(u"  3. Exit")
+        option = input(u'Enter a number > ')
+        if option == u'1':
             send_thank_you(donor_data)
-        elif option == '2':
+        elif option == u'2':
             print_donations(donor_data)
-        elif option == '3':
-            print("Bye!")
+        elif option == u'3':
+            print(u'Bye!')
             exit()
         else:
-            print("That's not an option")
+            print(u"That's not an option")
 
 
 # backwards compatible input
