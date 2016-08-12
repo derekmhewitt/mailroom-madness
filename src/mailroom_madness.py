@@ -178,7 +178,7 @@ def generate_row(name, donations):
 def generate_rows(donor_data):
     """Generate rows from donor_data.
     Args:
-        donor_data (TYPE): The data to generate a table from
+        donor_data (dict): The data to generate a table from
 
     Returns:
         list: A list of tuples, which represent rows
