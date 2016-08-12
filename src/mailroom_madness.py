@@ -127,7 +127,7 @@ def get_paddings(rows):
             for i in range(len(rows[0]))]
 
 
-def print_row(row, padding):
+def print_row(row, padding, out=sys.stdout):
     """Summary
 
     Args:
@@ -138,8 +138,8 @@ def print_row(row, padding):
         TYPE: Description
     """
     for value, padding in zip(row, padding):
-        sys.stdout.write(align_cell(value, padding))
-    sys.stdout.write('\n')
+        out.write(align_cell(value, padding))
+    out.write('\n')
 
 
 def print_table(rows):
@@ -174,7 +174,6 @@ def generate_row(name, donations):
 
 def generate_rows(donor_data):
     """Summary
-
     Args:
         donor_data (TYPE): Description
 
@@ -183,4 +182,4 @@ def generate_rows(donor_data):
     """
     t = list(map(lambda k: generate_row(k, donor_data[k]), donor_data.keys()))
     t.sort(key=lambda x: x[1], reverse=True)
-    return t
+    return ['Donor Name:', 'Total Donated:', 'Number of Donations:', 'Average Donation Amount:'] + t

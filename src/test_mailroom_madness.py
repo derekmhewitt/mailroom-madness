@@ -111,3 +111,28 @@ def test_get_paddings():
         ('Jennifer White', 99, 3, 33.0)
     ]
     assert get_paddings(rows) == [14, 3, 1, 5]
+
+
+def test_print_row():
+    """Function tests pring_row with test data."""
+    from mailroom_madness import print_row
+    from io import StringIO
+    out = StringIO()
+    row = ('Stephen Brown', 145, 3, 48.33)
+    padding = [14, 5, 3, 6]
+    compare = 'Stephen Brown   145    3    48.33   '
+    print_row(row, padding, out)
+    assert out.getvalue().strip() == compare.strip()
+
+
+# def test_log_thank_you():
+#     """Function tests log_thank_you with test data."""
+#     import mailroom_madness
+#     from io import StringIO
+#     out = StringIO()
+#     mailroom_madness.raw_input = lambda _: '53'
+#     d = {'Bob Barker': []}
+#     mailroom_madness.log_thank_you('Bob Barker', 53, d, out)
+#     assert d == {'Bob Barker': [53]}
+#     out_text = 'Thank you Bob Barker for your generous donation of 53 dollars.'
+#     assert out.getvalue().strip() == out_text
