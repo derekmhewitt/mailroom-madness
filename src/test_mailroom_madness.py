@@ -12,6 +12,13 @@ TEST_INTS = [
     (u'49', 49),
     (u'35', 35)
 ]
+TEST_DONATION_VALIDATION = [
+    (u'14', True),
+    (u'348', True),
+    (u'-28', False),
+    (u'taco', False),
+    (u'', False)
+]
 TEST_NAMES = [
     u'Jennifer Lange',
     u'Foo Bar',
@@ -33,7 +40,7 @@ def test_prompt_donor_name():
 
 
 @pytest.mark.parametrize('user_input, function_output', TEST_INTS)
-def test_get_int(user_input, function_output):
+def test_donation_amount(user_input, function_output):
     """Function tests get_int with simulated inputs.
 
     Args:
@@ -42,7 +49,14 @@ def test_get_int(user_input, function_output):
     """
     import mailroom_madness
     mailroom_madness.input = lambda _: user_input
-    assert mailroom_madness.get_int() == function_output
+    assert mailroom_madness.get_donation_amount() == function_output
+
+
+@pytest.mark.parametrize('user_in, func_out', TEST_DONATION_VALIDATION)
+def test_validate_donation_amount(user_in, func_out):
+    """Function tests validate_donation_amount with test data."""
+    from mailroom_madness import validate_donation_amount
+    assert validate_donation_amount(user_in) == func_out
 
 
 @pytest.mark.parametrize('user_input', TEST_NAMES)
@@ -140,5 +154,7 @@ def test_print_donations():
     }
 
     print_donations(test_data, out)
+    # This string has to be super long because it's the exact expected
+    # output of the test input
     expected_output = "Donor Name:     Total Donated:  Number of Donations:  Average Donation Amount:  \n" + "Larry Page      15              3                     5.0                       \n" + "Jennifer White  6               3                     2.0"
     assert out.getvalue().strip() == expected_output.strip()

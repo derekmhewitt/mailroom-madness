@@ -63,7 +63,7 @@ def list_donor_names(names, out=sys.stdout):
         out.write(u'* {}\n'.format(name))
 
 
-def get_int(out=sys.stdout):
+def get_donation_amount(out=sys.stdout):
     """Get an donation amount from the user.
 
     Return the amount or
@@ -73,16 +73,40 @@ def get_int(out=sys.stdout):
         out (file, optional): Description
     """
     prompt = u'Enter a donation amount or "cancel"> '
-    failure = u"That's not an integer."
+    failure = u"That's not a positive integer."
     while True:
-        try:
-            user_input = input(prompt)
-            if user_input == u'cancel':
-                return False
-            else:
-                return int(user_input)
-        except ValueError:
+        user_input = input(prompt)
+        if user_input == u'cancel':
+            return False
+        elif validate_donation_amount(user_input):
+            return int(user_input)
+        else:
             out.write(u'{}\n'.format(failure))
+
+
+def validate_donation_amount(user_input):
+    """Take user input, returns boolean."""
+    try:
+        return int(user_input) > 0
+    except ValueError:
+        return False
+
+
+def send_thank_you(donor_data):
+    """Prompt user for a name and donation amount and records them.
+
+    Args:
+        donor_data (dict)
+    """
+    name = prompt_donor_name(donor_data)
+    if name is False:
+        return
+
+    amount = get_donation_amount()
+    if amount is False:
+        return
+
+    log_thank_you(name, amount, donor_data)
 
 
 def log_thank_you(name, num, donor_data, out=sys.stdout):
@@ -97,23 +121,6 @@ def log_thank_you(name, num, donor_data, out=sys.stdout):
     donor_data[name].append(num)
     message = u'Thanks {} for your generous donation of {} dollars.\n'
     out.write(message.format(name, num))
-
-
-def send_thank_you(donor_data):
-    """Prompt user for a name and donation amount and records them.
-
-    Args:
-        donor_data (dict)
-    """
-    name = prompt_donor_name(donor_data)
-    if name is False:
-        return
-
-    amount = get_int()
-    if amount is False:
-        return
-
-    log_thank_you(name, amount, donor_data)
 
 
 def align_cell(value, padding):
